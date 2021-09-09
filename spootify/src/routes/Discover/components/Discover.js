@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DiscoverBlock from './DiscoverBlock/components/DiscoverBlock';
+import Spinner from '../../../common/components/Spinner';
 import { authorize, fetchNewReleases, fetchPlaylists, fetchCategories } from '../../../utils';
 import '../styles/_discover.scss';
 
@@ -16,17 +17,21 @@ export default class Discover extends Component {
   }
 
   async componentDidMount() {
-    const { access_token } = await authorize();
+    const token = await authorize();
     const [ newReleases, playlists, categories ] = await Promise.all([
-      fetchNewReleases(access_token),
-      fetchPlaylists(access_token),
-      fetchCategories(access_token),
+      fetchNewReleases(token),
+      fetchPlaylists(token),
+      fetchCategories(token),
     ]);
     this.setState({ newReleases, playlists, categories, isLoading: false });
   }
 
   render() {
-    const { newReleases, playlists, categories } = this.state;
+    const { newReleases, playlists, categories, isLoading } = this.state;
+
+    if (isLoading) {
+      return <Spinner />;
+    }
 
     return (
       <div className="discover">
