@@ -15,13 +15,12 @@ export const authorize = async () => {
       }),
       headers: {
         Authorization: `Basic ${creds}`,
-        'content-type': 'application/x-www-form-urlencoded',
       }
     });
-    return data;
+    return data.access_token;
   } catch (e) {
     console.error(e);
-    return { access_token: '' };
+    return '';
   }
 }
 
